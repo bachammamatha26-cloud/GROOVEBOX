@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed - GROOVEBOX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-cyan: #00ffff;
+            --neon-pink: #ff006e;
+            --neon-yellow: #ffbe0b;
+            --deep-purple: #1a0033;
+            --dark-bg: #0a0014;
+            --white: #ffffff;
+            --gray: #888888;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background: var(--dark-bg);
+            color: var(--white);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 0, 110, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        header {
+            background: rgba(10, 0, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--neon-cyan);
+            padding: 1.5rem 2rem;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .logo {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 2rem;
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+        }
+
+        .confirmation-container {
+            flex: 1;
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .success-animation {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInScale 0.6s ease;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .success-icon {
+            font-size: 6rem;
+            margin-bottom: 1rem;
+            animation: bounce 1s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .success-animation h1 {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 3rem;
+            background: linear-gradient(45deg, var(--neon-yellow), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .success-animation p {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        .order-details {
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px solid var(--neon-cyan);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--neon-pink);
+        }
+
+        .order-number {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 1.5rem;
+            color: var(--neon-cyan);
+        }
+
+        .order-date {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .info-section {
+            margin-bottom: 2rem;
+        }
+
+        .info-section h3 {
+            font-family: 'Archivo Black', sans-serif;
+            color: var(--neon-yellow);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .info-box h4 {
+            color: var(--neon-pink);
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .info-box p {
+            color: var(--white);
+            margin-bottom: 0.3rem;
+            line-height: 1.6;
+        }
+
+        .order-items {
+            margin: 2rem 0;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .item-info h4 {
+            color: var(--white);
+            margin-bottom: 0.3rem;
+        }
+
+        .item-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .item-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--neon-cyan);
+        }
+
+        .order-totals {
+            background: rgba(0, 255, 255, 0.05);
+            padding: 1.5rem;
+            border: 1px solid var(--neon-cyan);
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .total-row.grand-total {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--neon-yellow);
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--neon-pink);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 1.2rem;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--neon-pink);
+            color: var(--dark-bg);
+        }
+
+        .btn-primary:hover {
+            background: var(--neon-yellow);
+            transform: scale(1.02);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--neon-cyan);
+            border: 2px solid var(--neon-cyan);
+        }
+
+        .btn-secondary:hover {
+            background: var(--neon-cyan);
+            color: var(--dark-bg);
+        }
+
+        .print-btn {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .print-link {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .print-link:hover {
+            color: var(--neon-cyan);
+        }
+
+        footer {
+            margin-top: 5rem;
+            padding: 2rem;
+            text-align: center;
+            border-top: 2px solid var(--neon-pink);
+            background: rgba(10, 0, 20, 0.8);
+            color: var(--gray);
+        }
+
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .success-animation h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media print {
+            body::before {
+                display: none;
+            }
+            .action-buttons,
+            .print-btn,
+            header,
+            footer {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo" onclick="window.location.href='index.html'">GROOVEBOX</div>
+        </div>
+    </header>
+
+    <div class="confirmation-container">
+        <div class="success-animation">
+            <div class="success-icon">🎉</div>
+            <h1>ORDER CONFIRMED!</h1>
+            <p>Thank you for your purchase. Your order has been successfully placed.</p>
+        </div>
+
+        <div class="order-details">
+            <div class="order-header">
+                <div>
+                    <div class="order-number" id="orderNumber">Order #GB-000000</div>
+                    <div class="order-date" id="orderDate"></div>
+                </div>
+                <div style="color: var(--neon-cyan); font-size: 2rem;">📦</div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-box">
+                    <h4>📧 Contact Information</h4>
+                    <p id="customerEmail"></p>
+                    <p id="customerPhone"></p>
+                </div>
+
+                <div class="info-box">
+                    <h4>🚚 Shipping Address</h4>
+                    <p id="customerName"></p>
+                    <p id="shippingAddress"></p>
+                    <p id="shippingCity"></p>
+                    <p id="shippingCountry"></p>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h3>Order Items</h3>
+                <div class="order-items" id="orderItems"></div>
+            </div>
+
+            <div class="order-totals" id="orderTotals"></div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="index.html" class="btn btn-primary">Continue Shopping</a>
+            <a href="shop.html" class="btn btn-secondary">Browse More Music</a>
+        </div>
+
+        <div class="print-btn">
+            <a href="#" class="print-link" onclick="window.print(); return false;">🖨️ Print Order Confirmation</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>A confirmation email has been sent to your email address.</p>
+        <p style="margin-top: 1rem;">&copy; 2026 GROOVEBOX. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function displayOrderConfirmation() {
+            const orderData = JSON.parse(localStorage.getItem('lastOrder'));
+            
+            if (!orderData) {
+                alert('No order found. Redirecting to home page.');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Generate order number
+            const orderNumber = 'GB-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+            document.getElementById('orderNumber').textContent = `Order #${orderNumber}`;
+
+            // Display date
+            const orderDate = new Date(orderData.orderDate);
+            document.getElementById('orderDate').textContent = `Placed on ${orderDate.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            })}`;
+
+            // Customer info
+            document.getElementById('customerEmail').textContent = orderData.customer.email;
+            document.getElementById('customerPhone').textContent = orderData.customer.phone;
+            document.getElementById('customerName').textContent = `${orderData.customer.firstName} ${orderData.customer.lastName}`;
+
+            // Shipping address
+            const shipping = orderData.shipping;
+            document.getElementById('shippingAddress').textContent = 
+                `${shipping.address}${shipping.apartment ? ', ' + shipping.apartment : ''}`;
+            document.getElementById('shippingCity').textContent = 
+                `${shipping.city}, ${shipping.state} ${shipping.zip}`;
+            document.getElementById('shippingCountry').textContent = shipping.country;
+
+            // Order items
+            const itemsHTML = orderData.cart.map(item => `
+                <div class="order-item">
+                    <div class="item-info">
+                        <h4>${item.name}</h4>
+                        <p>${item.artist || 'Various Artists'} × ${item.quantity}</p>
+                    </div>
+                    <div class="item-price">$${(item.price * item.quantity).toFixed(2)}</div>
+                </div>
+            `).join('');
+            document.getElementById('orderItems').innerHTML = itemsHTML;
+
+            // Calculate totals
+            const subtotal = orderData.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = subtotal > 100 ? 0 : 12.99;
+            const tax = subtotal * 0.1;
+            const total = subtotal + shipping + tax;
+
+            document.getElementById('orderTotals').innerHTML = `
+                <div class="total-row">
+                    <span>Subtotal</span>
+                    <span>$${subtotal.toFixed(2)}</span>
+                </div>
+                <div class="total-row">
+                    <span>Shipping</span>
+                    <span>${shipping === 0 ? 'FREE' : '$' + shipping.toFixed(2)}</span>
+                </div>
+                <div class="total-row">
+                    <span>Tax</span>
+                    <span>$${tax.toFixed(2)}</span>
+                </div>
+                <div class="total-row grand-total">
+                    <span>TOTAL PAID</span>
+                    <span>$${total.toFixed(2)}</span>
+                </div>
+            `;
+
+            // Send confirmation email (simulated)
+            console.log('Order confirmation email sent to:', orderData.customer.email);
+        }
+
+        // Initialize
+        displayOrderConfirmation();
+    </script>
+</body>
+</html>

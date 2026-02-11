@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - GROOVEBOX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-cyan: #00ffff;
+            --neon-pink: #ff006e;
+            --neon-yellow: #ffbe0b;
+            --deep-purple: #1a0033;
+            --dark-bg: #0a0014;
+            --white: #ffffff;
+            --gray: #888888;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background: var(--dark-bg);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 0, 110, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(10, 0, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--neon-cyan);
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 2rem;
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-links a.active {
+            color: var(--neon-cyan);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neon-pink);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .cart-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--neon-pink);
+            color: var(--dark-bg);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .shop-header {
+            max-width: 1400px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .shop-header h1 {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 4rem;
+            background: linear-gradient(90deg, var(--neon-yellow), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--neon-cyan);
+            color: var(--dark-bg);
+            border-color: var(--neon-cyan);
+        }
+
+        .products {
+            max-width: 1400px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 10px 40px rgba(0, 255, 255, 0.3);
+        }
+
+        .product-image {
+            width: 100%;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, var(--deep-purple), var(--dark-bg));
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image::after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 60%;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .product-card h3 {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--neon-yellow);
+        }
+
+        .product-card .artist {
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .genre-tag {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon-cyan);
+            font-size: 0.7rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .product-card .price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--neon-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 0, 110, 0.2);
+            border: 2px solid var(--neon-pink);
+            color: var(--white);
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background: var(--neon-pink);
+            color: var(--dark-bg);
+        }
+
+        footer {
+            margin-top: 6rem;
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 2px solid var(--neon-pink);
+            background: rgba(10, 0, 20, 0.8);
+        }
+
+        footer p {
+            color: var(--gray);
+        }
+
+        @media (max-width: 768px) {
+            .shop-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo" onclick="window.location.href='index.html'">GROOVEBOX</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html" class="active">Shop</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+            <div class="cart-icon" onclick="window.location.href='cart.html'">
+                🛒
+                <span class="cart-count" id="cartCount">0</span>
+            </div>
+        </nav>
+    </header>
+
+    <section class="shop-header">
+        <h1>VINYL COLLECTION</h1>
+        <p style="color: var(--gray);">Discover the finest selection of vinyl records</p>
+        
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterProducts('all')">All</button>
+            <button class="filter-btn" onclick="filterProducts('electronic')">Electronic</button>
+            <button class="filter-btn" onclick="filterProducts('rock')">Rock</button>
+            <button class="filter-btn" onclick="filterProducts('jazz')">Jazz</button>
+            <button class="filter-btn" onclick="filterProducts('hip-hop')">Hip-Hop</button>
+        </div>
+    </section>
+
+    <section class="products">
+        <div class="product-grid" id="productGrid">
+            <!-- Products will be dynamically loaded -->
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 GROOVEBOX. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const products = [
+            { id: 1, name: 'Midnight Dreams', artist: 'The Synthwave Collective', price: 29.99, genre: 'electronic', icon: '🎵' },
+            { id: 2, name: 'Electric Horizon', artist: 'Neon Riders', price: 34.99, genre: 'rock', icon: '🎸' },
+            { id: 3, name: 'Cosmic Journey', artist: 'Star Gazers', price: 27.99, genre: 'electronic', icon: '🎹' },
+            { id: 4, name: 'Urban Legends', artist: 'Metro Beats', price: 31.99, genre: 'hip-hop', icon: '🎤' },
+            { id: 5, name: 'Neon Nights', artist: 'Retro Future', price: 29.99, genre: 'electronic', icon: '🌃' },
+            { id: 6, name: 'Jazz Odyssey', artist: 'The Quartet', price: 36.99, genre: 'jazz', icon: '🎺' },
+            { id: 7, name: 'Thunder Road', artist: 'Highway Kings', price: 32.99, genre: 'rock', icon: '⚡' },
+            { id: 8, name: 'Bass Drop', artist: 'Sub Frequencies', price: 28.99, genre: 'electronic', icon: '🔊' },
+            { id: 9, name: 'Soul Searching', artist: 'Velvet Voices', price: 33.99, genre: 'jazz', icon: '💫' },
+            { id: 10, name: 'Street Symphony', artist: 'Urban Poets', price: 30.99, genre: 'hip-hop', icon: '🏙️' },
+            { id: 11, name: 'Analog Dreams', artist: 'Synthesizer Squad', price: 35.99, genre: 'electronic', icon: '🎛️' },
+            { id: 12, name: 'Desert Sessions', artist: 'Canyon Echoes', price: 31.99, genre: 'rock', icon: '🏜️' }
+        ];
+
+        function renderProducts(productsToShow) {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = productsToShow.map(product => `
+                <div class="product-card" data-genre="${product.genre}">
+                    <div class="product-image">${product.icon}</div>
+                    <h3>${product.name}</h3>
+                    <p class="artist">${product.artist}</p>
+                    <span class="genre-tag">${product.genre}</span>
+                    <p class="price">$${product.price.toFixed(2)}</p>
+                    <button class="add-to-cart" onclick="addToCart(${product.id}, '${product.name}', ${product.price})">
+                        Add to Cart
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function filterProducts(genre) {
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Filter products
+            const filtered = genre === 'all' 
+                ? products 
+                : products.filter(p => p.genre === genre);
+            
+            renderProducts(filtered);
+        }
+
+        function getCart() {
+            return JSON.parse(localStorage.getItem('cart')) || [];
+        }
+
+        function saveCart(cart) {
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+        }
+
+        function addToCart(id, name, price) {
+            const cart = getCart();
+            const existingItem = cart.find(item => item.id === id);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ id, name, price, quantity: 1 });
+            }
+            
+            saveCart(cart);
+            
+            // Visual feedback
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = '✓ Added!';
+            button.style.background = 'var(--neon-cyan)';
+            button.style.color = 'var(--dark-bg)';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = '';
+                button.style.color = '';
+            }, 1500);
+        }
+
+        function updateCartCount() {
+            const cart = getCart();
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
+        }
+
+        // Initialize
+        renderProducts(products);
+        updateCartCount();
+    </script>
+</body>
+</html>
